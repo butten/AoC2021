@@ -12,6 +12,11 @@ fun main() {
         System.currentTimeMillis(),
         play(bingo)
     )
+    Util.log(
+        "let the squid win",
+        System.currentTimeMillis(),
+        lose(bingo)
+    )
 }
 
 fun parseBingo(bingoData: List<String>): Bingo {
@@ -41,12 +46,33 @@ fun play(bingo: Bingo): Int {
             val index = board.findIndexOfValue(number)
             if (index != -1) {
                 board.mark(index)
-
+                
                 if (board.isWinner()) {
-                    return board.calculateScore(number)
+                    board.calculateScore(number)
+                    return board.score
                 }
             }
         }
+    }
+    error("No winner :(")
+}
+
+fun lose(bingo: Bingo): Int {
+    bingo.numbers.forEach { number ->
+        // don't play on boards that has already won
+        val boardsLeft = bingo.boards.filter { it.score == -1 }
+
+        boardsLeft.forEach { board ->
+            val index = board.findIndexOfValue(number)
+            if (index != -1) {
+                board.mark(index)
+
+                if (board.isWinner()) {
+                    board.calculateScore(number)
+                }
+            }
+        }
+        if (boardsLeft.size == 1 && boardsLeft[0].score != -1) return boardsLeft[0].score
     }
     error("No winner :(")
 }
@@ -59,6 +85,7 @@ data class Board(val values: List<Int>) {
     }
 
     private val marks = MutableList(BOARD_WIDTH * BOARD_WIDTH) { 0 }
+    var score = -1
 
     fun getX(index: Int): Int = index % BOARD_WIDTH
     fun getY(index: Int): Int = index / BOARD_WIDTH
@@ -85,8 +112,8 @@ data class Board(val values: List<Int>) {
         return row or col
     }
 
-    fun calculateScore(number: Int): Int {
-        return number * values.asSequence()
+    fun calculateScore(number: Int) {
+        score = number * values.asSequence()
             .filterIndexed { index, _ -> marks[index] == 0 }
             .sumBy { it }
     }

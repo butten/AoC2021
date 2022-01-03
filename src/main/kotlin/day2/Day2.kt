@@ -1,33 +1,40 @@
 package day2
 
 import util.Util
-import util.Timer
 import java.io.File
 
 fun main() {
-    val timer = Timer()
-
-    val commands = File("src/main/kotlin/day2/input").readLines()
-    val instructions = commands.map { it.substringBefore(" ") }
-    val args = commands.map { it.substringAfter(" ").toInt() }
-    timer.read()
-    
+    val file = File("src/main/kotlin/day2/input")
+    val commands = Util.log(
+        "parse commands",
+        System.currentTimeMillis(),
+        parseCommands(file)
+    ) as Commands
     Util.log(
         "execute simple planned course",
         System.currentTimeMillis(),
-        executeSimplePlannedCourse(instructions, args).multiply()
+        executeSimplePlannedCourse(commands).multiply()
     )
     Util.log(
         "execute simple planned course",
         System.currentTimeMillis(),
-        executeAdvancedPlannedCourse(instructions, args).multiply()
+        executeAdvancedPlannedCourse(commands).multiply()
     )
 }
 
-fun executeSimplePlannedCourse(instructions: List<String>, args: List<Int>): Position {
+data class Commands(val instructions: List<String>, val args: List<Int>)
+
+fun parseCommands(file: File): Commands {
+    val commands = file.readLines()
+    val instructions = commands.map { it.substringBefore(" ") }
+    val args = commands.map { it.substringAfter(" ").toInt() }
+    return Commands(instructions, args)
+}
+
+fun executeSimplePlannedCourse(commands: Commands): Position {
     val position = Position(0, 0, 0)
 
-    (instructions zip args).forEach {
+    (commands.instructions zip commands.args).forEach {
         when (it.first) {
             "forward" -> position.horizontalPosition += it.second
             "up" -> position.depth -= it.second
@@ -39,10 +46,10 @@ fun executeSimplePlannedCourse(instructions: List<String>, args: List<Int>): Pos
     return position
 }
 
-fun executeAdvancedPlannedCourse(instructions: List<String>, args: List<Int>): Position {
+fun executeAdvancedPlannedCourse(commands: Commands): Position {
     val position = Position(0, 0, 0)
 
-    (instructions zip args).forEach {
+    (commands.instructions zip commands.args).forEach {
         when (it.first) {
             "forward" -> {
                 position.horizontalPosition += it.second

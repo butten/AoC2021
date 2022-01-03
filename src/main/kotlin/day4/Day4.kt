@@ -5,8 +5,12 @@ import util.Util
 import java.io.File
 
 fun main() {
-    val bingoData = File("src/main/kotlin/day4/input").readLines()
-    val bingo = parseBingo(bingoData)
+    val file = File("src/main/kotlin/day4/input").readLines()
+    val bingo = Util.log(
+        "parse bingo",
+        System.currentTimeMillis(),
+        parseBingo(file)
+    ) as Bingo
     Util.log(
         "play bingo with squid",
         System.currentTimeMillis(),
@@ -46,7 +50,7 @@ fun play(bingo: Bingo): Int {
             val index = board.findIndexOfValue(number)
             if (index != -1) {
                 board.mark(index)
-                
+
                 if (board.isWinner()) {
                     board.calculateScore(number)
                     return board.score

@@ -4,9 +4,21 @@ import util.Util
 import java.io.File
 
 fun main() {
-    val measurements = File("src/main/kotlin/day1/input").readLines().map { line -> line.toInt() }
-    Util.log("simple sweep", System.currentTimeMillis(), simpleSweep(measurements))
-    Util.log("advanced sweep", System.currentTimeMillis(), advancedSweep(measurements))
+    val file = File("src/main/kotlin/day1/input")
+    val measurements: List<Int> = Util.log(
+        "parse measurements",
+        System.currentTimeMillis(),
+        file.readLines().map { line -> line.toInt() }).filterIsInstance<Int>()
+    Util.log(
+        "simple sweep",
+        System.currentTimeMillis(),
+        simpleSweep(measurements)
+    )
+    Util.log(
+        "advanced sweep",
+        System.currentTimeMillis(),
+        advancedSweep(measurements)
+    )
 }
 
 fun simpleSweep(measurements: List<Int>): Int {

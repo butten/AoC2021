@@ -4,19 +4,25 @@ import util.Util
 import java.io.File
 
 fun main() {
-    val report = File("src/main/kotlin/day3/input").readLines()
+    val file = File("src/main/kotlin/day3/input")
+    val report = Util.log(
+        "parse report",
+        System.currentTimeMillis(),
+        parseReport(file)
+    ).filterIsInstance<String>()
     Util.log(
         "calculate power consumption",
         System.currentTimeMillis(),
         calculatePowerConsumption(report)
     )
-
     Util.log(
         "verify life support rating",
         System.currentTimeMillis(),
         verifyLifeSupportRating(report)
     )
 }
+
+fun parseReport(file: File): List<String> = file.readLines()
 
 fun calculatePowerConsumption(report: List<String>): Int {
     val gammaRate = calculateGammaRate(report)
@@ -28,7 +34,7 @@ fun calculateGammaRate(report: List<String>): String {
     var result = ""
     for (col in report[0].indices) {                                        // iterate over each bit (column), i = 0..12
         val nrOfOnes = report.count { row -> row[col] == '1' }
-        val nrOfZeros= report.count { row -> row[col] == '0' }
+        val nrOfZeros = report.count { row -> row[col] == '0' }
         val mostCommonValueInCol = if (nrOfOnes >= nrOfZeros) '1' else '0'
         result += mostCommonValueInCol
     }
@@ -54,7 +60,7 @@ fun findOxygenGeneratorRating(report: List<String>): Int {
     for (col in report[0].indices) {
 
         val nrOfOnes = filteredNumbers.count { row -> row[col] == '1' }
-        val nrOfZeros= filteredNumbers.count { row -> row[col] == '0' }
+        val nrOfZeros = filteredNumbers.count { row -> row[col] == '0' }
         // if equally common, set '1'
         val mostCommonValueInCol = if (nrOfOnes >= nrOfZeros) '1' else '0'
 
@@ -72,7 +78,7 @@ fun findCO2ScrubberRating(report: List<String>): Int {
     for (col in report[0].indices) {
 
         val nrOfOnes = filteredNumbers.count { row -> row[col] == '1' }
-        val nrOfZeros= filteredNumbers.count { row -> row[col] == '0' }
+        val nrOfZeros = filteredNumbers.count { row -> row[col] == '0' }
         // if equally common, set '0'
         val leastCommonValueInCol = if (nrOfOnes < nrOfZeros) '1' else '0'
 

@@ -3,28 +3,27 @@ package day2
 import util.Util
 import java.io.File
 
+fun main() {
+    val day2 = Day2()
+    val file = File("src/main/kotlin/day2/input")
+    val commands = Util.log(
+        "parse commands",
+        System.currentTimeMillis(),
+        day2.parseCommands(file)
+    ) as Commands
+    Util.log(
+        "execute simple planned course",
+        System.currentTimeMillis(),
+        day2.executeSimplePlannedCourse(commands)
+    )
+    Util.log(
+        "execute simple planned course",
+        System.currentTimeMillis(),
+        day2.executeAdvancedPlannedCourse(commands)
+    )
+}
+
 class Day2 {
-    fun main() {
-        val file = File("src/main/kotlin/day2/input")
-        val commands = Util.log(
-            "parse commands",
-            System.currentTimeMillis(),
-            parseCommands(file)
-        ) as Commands
-        Util.log(
-            "execute simple planned course",
-            System.currentTimeMillis(),
-            executeSimplePlannedCourse(commands)
-        )
-        Util.log(
-            "execute simple planned course",
-            System.currentTimeMillis(),
-            executeAdvancedPlannedCourse(commands)
-        )
-    }
-
-    data class Commands(val instructions: List<String>, val args: List<Int>)
-
     fun parseCommands(file: File): Commands {
         val commands = file.readLines()
         val instructions = commands.map { it.substringBefore(" ") }

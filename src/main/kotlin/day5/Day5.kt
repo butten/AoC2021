@@ -1,24 +1,31 @@
 package day5
 
+import util.Util
 import java.io.File
 
 fun main() {
-    val linesData = File("src/main/kotlin/day5/test").readLines()
-    val lines = parseLines(linesData)
-    findDangerousCoordinates(lines)
+    val day5 = Day5()
+    val file = File("src/main/kotlin/day5/test")
+    val lines = Util.log(
+        "parse lines",
+        System.currentTimeMillis(),
+        day5.parseLines(file)
+    ).filterIsInstance<Line>()
+    Util.log(
+        "execute simple planned course",
+        System.currentTimeMillis(),
+        day5.findDangerousCoordinates(lines)
+    )
 }
 
-fun findDangerousCoordinates(lines: Unit) {
+class Day5 {
+    fun parseLines(file: File): List<Line> {
+        return file.readLines()
+            .map { row -> row.split(",", " -> ").map { element -> element.toInt() } }
+            .map { Line(it[0], it[1], it[2], it[3]) }
+    }
 
-}
-
-fun parseLines(linesData: List<String>) {
-    linesData.forEach { line ->
-        line.split(",", " -> ")                 // split each line using delimiters
-            .map { it.toInt() }                           // cast each string value to Int
-            .chunked(4)                              // bunch the values into groups of four
-            .map { Line(it[0], it[1], it[2], it[3]) }     // map to Line objects
+    fun findDangerousCoordinates(lines: List<Line>) {
+        println("horizontal and vertical lines: \n ${lines.filterDiagLines()}")
     }
 }
-
-data class Line(val x1: Int, val y1: Int, val x2: Int, val y2: Int)

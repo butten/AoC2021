@@ -3,26 +3,27 @@ package day1
 import util.Util
 import java.io.File
 
-class Day1 {
-    fun main() {
-        val file = File("src/main/kotlin/day1/input")
-        val measurements: List<Int> = Util.log(
-            "parse measurements",
-            System.currentTimeMillis(),
-            parseMeasurements(file)
-        ).filterIsInstance<Int>()
-        Util.log(
-            "simple sweep",
-            System.currentTimeMillis(),
-            simpleSweep(measurements)
-        )
-        Util.log(
-            "advanced sweep",
-            System.currentTimeMillis(),
-            advancedSweep(measurements)
-        )
-    }
+fun main() {
+    val day1 = Day1()
+    val file = File("src/main/kotlin/day1/input")
+    val measurements: List<Int> = Util.log(
+        "parse measurements",
+        System.currentTimeMillis(),
+        day1.parseMeasurements(file)
+    ).filterIsInstance<Int>()
+    Util.log(
+        "simple sweep",
+        System.currentTimeMillis(),
+        day1.simpleSweep(measurements)
+    )
+    Util.log(
+        "advanced sweep",
+        System.currentTimeMillis(),
+        day1.advancedSweep(measurements)
+    )
+}
 
+class Day1 {
     fun parseMeasurements(file: File): List<Int> = file.readLines().map { line -> line.toInt() }
 
     fun simpleSweep(measurements: List<Int>): Int {

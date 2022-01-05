@@ -1,36 +1,17 @@
 package day4
 
 import day4.Board.Companion.BOARD_WIDTH
-import util.Util
+import util.Day
 import java.io.File
 
-fun main() {
-    val day4 = Day4()
-    val file = File("src/main/kotlin/day4/input").readLines()
-    val bingo = Util.log(
-        "parse bingo",
-        System.currentTimeMillis(),
-        day4.parseBingo(file)
-    ) as Bingo
-    Util.log(
-        "play bingo with squid",
-        System.currentTimeMillis(),
-        day4.play(bingo)
-    )
-    Util.log(
-        "let the squid win",
-        System.currentTimeMillis(),
-        day4.lose(bingo)
-    )
-}
-
-class Day4 {
-    fun parseBingo(bingoData: List<String>): Bingo {
+class Day4: Day<Bingo>(4, "Giant Squid") {
+    override fun parse(file: File): Bingo {
+        val lines = file.readLines()
         //first line contains the random numbers from which we draw
-        val numbers = bingoData[0].split(",").map { it.toInt() }
+        val numbers = lines[0].split(",").map { it.toInt() }
 
-        val boards = bingoData.asSequence()
-            // remove first two lines from the input
+        val boards = lines.asSequence()
+            // remove first two lines from the input_day1
             .drop(2)
             // split each number into elements and remove elements who are empty (happens on single digits)
             .map { it.split(" ").filter { nr -> nr != "" } }
@@ -46,9 +27,9 @@ class Day4 {
         return Bingo(numbers, boards)
     }
 
-    fun play(bingo: Bingo): Int {
-        bingo.numbers.forEach { number ->
-            bingo.boards.forEach { board ->
+    override fun partOne(): Int {
+        data.numbers.forEach { number ->
+            data.boards.forEach { board ->
                 val index = board.findIndexOfValue(number)
                 if (index != -1) {
                     board.mark(index)
@@ -63,10 +44,10 @@ class Day4 {
         error("No winner :(")
     }
 
-    fun lose(bingo: Bingo): Int {
-        bingo.numbers.forEach { number ->
+    override fun partTwo(): Int {
+        data.numbers.forEach { number ->
             // don't play on boards that has already won
-            val boardsLeft = bingo.boards.filter { it.score == -1 }
+            val boardsLeft = data.boards.filter { it.score == -1 }
 
             boardsLeft.forEach { board ->
                 val index = board.findIndexOfValue(number)

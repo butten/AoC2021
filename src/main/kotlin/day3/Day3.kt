@@ -1,38 +1,17 @@
 package day3
 
-import util.Util
+import util.Day
 import java.io.File
 
-fun main() {
-    val day3 = Day3()
-    val file = File("src/main/kotlin/day3/input")
-    val report = Util.log(
-        "parse report",
-        System.currentTimeMillis(),
-        day3.parseReport(file)
-    ).filterIsInstance<String>()
-    Util.log(
-        "calculate power consumption",
-        System.currentTimeMillis(),
-        day3.calculatePowerConsumption(report)
-    )
-    Util.log(
-        "verify life support rating",
-        System.currentTimeMillis(),
-        day3.verifyLifeSupportRating(report)
-    )
-}
+class Day3: Day<List<String>>(3, "Binary Diagnostic") {
+    override fun parse(file: File): List<String> = file.readLines()
 
-class Day3 {
-    fun parseReport(file: File): List<String> = file.readLines()
-
-    fun calculatePowerConsumption(report: List<String>): Int {
-        val gammaRate = calculateGammaRate(report)
+    override fun partOne(): Int {
+        val gammaRate = calculateGammaRate(data)
         val epsilonRate = calculateEpsilonRate(gammaRate)
-        return gammaRate.toInt(2) * epsilonRate.toInt(2)
-    }
+        return gammaRate.toInt(2) * epsilonRate.toInt(2)    }
 
-    fun calculateGammaRate(report: List<String>): String {
+    private fun calculateGammaRate(report: List<String>): String {
         var result = ""
         for (col in report[0].indices) {                                // iterate over each bit/column, i = 0..12
             val nrOfOnes = report.count { row -> row[col] == '1' }
@@ -43,7 +22,7 @@ class Day3 {
         return result
     }
 
-    fun calculateEpsilonRate(gammaRate: String): String {
+    private fun calculateEpsilonRate(gammaRate: String): String {
         var epsilonRate = ""
         for (element in gammaRate) {
             epsilonRate += if (element == '1') '0' else '1'
@@ -51,13 +30,13 @@ class Day3 {
         return epsilonRate
     }
 
-    fun verifyLifeSupportRating(report: List<String>): Int {
-        val oxygenGeneratorRating = findOxygenGeneratorRating(report)
-        val co2ScrubberRating = findCO2ScrubberRating(report)
+    override fun partTwo(): Int {
+        val oxygenGeneratorRating = findOxygenGeneratorRating(data)
+        val co2ScrubberRating = findCO2ScrubberRating(data)
         return oxygenGeneratorRating * co2ScrubberRating
     }
 
-    fun findOxygenGeneratorRating(report: List<String>): Int {
+    private fun findOxygenGeneratorRating(report: List<String>): Int {
         var filteredNumbers = report
         for (col in report[0].indices) {
 
@@ -75,7 +54,7 @@ class Day3 {
         error("oxygen generator rating not found!")
     }
 
-    fun findCO2ScrubberRating(report: List<String>): Int {
+    private fun findCO2ScrubberRating(report: List<String>): Int {
         var filteredNumbers = report
         for (col in report[0].indices) {
 

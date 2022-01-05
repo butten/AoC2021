@@ -1,40 +1,21 @@
 package day2
 
+import util.Day
 import util.Util
 import java.io.File
 
-fun main() {
-    val day2 = Day2()
-    val file = File("src/main/kotlin/day2/input")
-    val commands = Util.log(
-        "parse commands",
-        System.currentTimeMillis(),
-        day2.parseCommands(file)
-    ) as Commands
-    Util.log(
-        "execute simple planned course",
-        System.currentTimeMillis(),
-        day2.executeSimplePlannedCourse(commands)
-    )
-    Util.log(
-        "execute simple planned course",
-        System.currentTimeMillis(),
-        day2.executeAdvancedPlannedCourse(commands)
-    )
-}
-
-class Day2 {
-    fun parseCommands(file: File): Commands {
+class Day2: Day<Commands>(2, "Dive!") {
+    override fun parse(file: File): Commands {
         val commands = file.readLines()
         val instructions = commands.map { it.substringBefore(" ") }
         val args = commands.map { it.substringAfter(" ").toInt() }
         return Commands(instructions, args)
     }
 
-    fun executeSimplePlannedCourse(commands: Commands): Int {
+    override fun partOne(): Int {
         val position = Position(0, 0, 0)
 
-        (commands.instructions zip commands.args).forEach {
+        (data.instructions zip data.args).forEach {
             when (it.first) {
                 "forward" -> position.horizontalPosition += it.second
                 "up" -> position.depth -= it.second
@@ -46,10 +27,10 @@ class Day2 {
         return position.multiply()
     }
 
-    fun executeAdvancedPlannedCourse(commands: Commands): Int {
+    override fun partTwo(): Int {
         val position = Position(0, 0, 0)
 
-        (commands.instructions zip commands.args).forEach {
+        (data.instructions zip data.args).forEach {
             when (it.first) {
                 "forward" -> {
                     position.horizontalPosition += it.second

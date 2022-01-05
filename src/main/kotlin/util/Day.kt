@@ -1,6 +1,5 @@
 package util
 
-import day1.Day1
 import java.io.File
 
 abstract class Day<T>(private val day: Int, private val title: String) {

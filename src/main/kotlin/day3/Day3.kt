@@ -3,13 +3,14 @@ package day3
 import util.Day
 import java.io.File
 
-class Day3: Day<List<String>>(3, "Binary Diagnostic") {
+class Day3 : Day<List<String>>(3, "Binary Diagnostic") {
     override fun parse(file: File): List<String> = file.readLines()
 
     override fun partOne(): Int {
         val gammaRate = calculateGammaRate(data)
         val epsilonRate = calculateEpsilonRate(gammaRate)
-        return gammaRate.toInt(2) * epsilonRate.toInt(2)    }
+        return gammaRate.toInt(2) * epsilonRate.toInt(2)
+    }
 
     private fun calculateGammaRate(report: List<String>): String {
         var result = ""

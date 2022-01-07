@@ -24,7 +24,6 @@ class Day7 : Day<IntArray>(7, "The Treachery of Whales") {
             .minOf { it }   // take the smallest fuel consumption
     }
 
-
     override fun partTwo(): Any {
         return (2..data.maxOf { it })   // for every possible alignment position
             .map { alignPos -> data.sumOf { abs(it - alignPos).sumSeries() } } // compute total fuel cost to that pos

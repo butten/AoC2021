@@ -172,7 +172,7 @@ data class Entry(val usp: List<String>, val fdov: List<String>) {
     fun getSegmentsWithNrOfBits(n: Int): List<String> {
         return getAllValues().filter { it.length == n }
     }
-    
+
     override fun toString(): String {
         return "$usp | $fdov"
     }

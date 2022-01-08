@@ -1,6 +1,5 @@
 package day9
 
-import day8.*
 import day8.down
 import day8.left
 import day8.right

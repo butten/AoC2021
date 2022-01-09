@@ -1,7 +1,5 @@
 package day9
 
-import day8.lookAround
-
 // ExpandBasin1 uses recursion
 class ExpandBasin1(val lowPoint: Pair<Int, Int>, val map: Array<IntArray>) {
     private val result = mutableSetOf<Pair<Int, Int>>()

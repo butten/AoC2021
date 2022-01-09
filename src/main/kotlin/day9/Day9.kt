@@ -1,13 +1,11 @@
 package day9
 
-import day8.down
-import day8.left
-import day8.right
-import day8.up
-import util.Day
+import util.*
 import java.io.File
 
-class Day9 : Day<Array<IntArray>>(9, "Smoke Basin") {
+const val wall = 9
+
+class Day9 : Day<Matrix>(9, "Smoke Basin") {
 
     companion object {
         @JvmStatic
@@ -17,14 +15,10 @@ class Day9 : Day<Array<IntArray>>(9, "Smoke Basin") {
         }
     }
 
-    override fun parse(file: File): Array<IntArray> {
+    override fun parse(file: File): Matrix {
         return file.readLines()
             .map { line -> line.map { Character.getNumericValue(it) } }
-            .map { it.toIntArray() }.toTypedArray()
-    }
-
-    private fun Array<IntArray>.print() {
-        this.forEach { println(it.contentToString()) }
+            .toMatrix()
     }
 
     override fun partOne(): Any {
@@ -32,14 +26,14 @@ class Day9 : Day<Array<IntArray>>(9, "Smoke Basin") {
         return lowPoints.sumOf { data[it.first][it.second] + 1 }
     }
 
-    private fun findLowPoints(data: Array<IntArray>): List<Pair<Int, Int>> {
+    private fun findLowPoints(data: Matrix): List<Pair<Int, Int>> {
         val result = mutableListOf<Pair<Int, Int>>()
         for (row in data.indices) {
             for (col in data[row].indices) {
-                if (data[row][col] < up(row, col, data)
-                    && data[row][col] < down(row, col, data)
-                    && data[row][col] < left(row, col, data)
-                    && data[row][col] < right(row, col, data)
+                if (data[row][col] < data.up(row, col, wall)
+                    && data[row][col] < data.down(row, col, wall)
+                    && data[row][col] < data.left(row, col, wall)
+                    && data[row][col] < data.right(row, col, wall)
                 ) {
                     result.add(Pair(row, col))
                 }
@@ -59,4 +53,32 @@ class Day9 : Day<Array<IntArray>>(9, "Smoke Basin") {
 
         return results[results.size - 1] * results[results.size - 2] * results[results.size - 3]
     }
+}
+
+internal fun lookAround(origin: Pair<Int, Int>,  map: Matrix): List<Pair<Int, Int>> {
+    // return list of coordinates that are bigger than origin (but not equal to 9)
+    val result = mutableListOf<Pair<Int, Int>>()
+    val valueAtOrigin = map[origin.first][origin.second]
+
+    val valueUp = map.up(origin.first, origin.second, wall)
+    if (valueAtOrigin < valueUp && valueUp != 9) {
+        result.add(Pair(origin.first - 1, origin.second))
+    }
+
+    val valueDown = map.down(origin.first, origin.second, wall)
+    if (valueAtOrigin < valueDown && valueDown != 9) {
+        result.add(Pair(origin.first + 1, origin.second))
+    }
+
+    val valueLeft = map.left(origin.first, origin.second, wall)
+    if (valueAtOrigin < valueLeft && valueLeft != 9) {
+        result.add(Pair(origin.first, origin.second - 1))
+    }
+
+    val valueRight = map.right(origin.first, origin.second, wall)
+    if (valueAtOrigin < valueRight && valueRight != 9) {
+        result.add(Pair(origin.first, origin.second + 1))
+    }
+
+    return result.toList()
 }

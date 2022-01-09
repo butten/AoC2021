@@ -1,6 +1,6 @@
 package days
 
-import Day11
+import day11.Day11
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
 

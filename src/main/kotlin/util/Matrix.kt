@@ -1,5 +1,6 @@
 package util
 
+// Used by Days who can be represented as 2d maps
 typealias Matrix = Array<IntArray>
 
 const val bright = "\u001b[97m"

@@ -42,6 +42,16 @@ fun Matrix.allEqual(value: Int): Boolean {
     return true
 }
 
+fun Matrix.sum(): Int {
+    var result = 0
+    for (row in this.indices) {
+        for (col in this[row].indices) {
+            result += this[row][col]
+        }
+    }
+    return result
+}
+
 fun Matrix.up(row: Int, col: Int, ifOutside: Int): Int {
     return try {
         this[row - 1][col]
